@@ -6,18 +6,23 @@ import {
   getUser,
   updateUserPassword,
 } from "../controllers/user.controllers.js";
-import { protect, admin } from "../middlewares/auth.middleware.js";
+import { protect, checkRole } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.get("/", protect, admin, getUsers);
+router.get("/", protect, checkRole("admin"), getUsers);
 
-router.get("/:userId", protect, admin, getUser);
+router.get("/:userId", protect, checkRole("admin"), getUser);
 
-router.post("/", protect, admin, addUser);
+router.post("/", protect, checkRole("admin"), addUser);
 
-router.put("/newpassword/:userId", protect, admin, updateUserPassword);
+router.put(
+  "/newpassword/:userId",
+  protect,
+  checkRole("admin"),
+  updateUserPassword
+);
 
-router.delete("/delete/:userId", protect, admin, deleteUser);
+router.delete("/delete/:userId", protect, checkRole("admin"), deleteUser);
 
 export default router;
