@@ -23,8 +23,8 @@ const categorySchema = new mongoose.Schema({
   dishes: [dishSchema],
 });
 
-
 const menuSchema = new mongoose.Schema({
+  name: { type: String, required: true },
   categories: [categorySchema],
 });
 

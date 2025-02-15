@@ -1,10 +1,27 @@
 import { CustomError } from "../errors/CustomError.js";
 import Menu from "../models/menu.model.js";
 
+export const getMenus = async (req, res, next) => {
+  try {
+    const menus = await Menu.find();
+
+    res.status(200).json(menus);
+  } catch (error) {
+    next(new CustomError("Error fetching menus!!!", 500));
+  }
+};
+
 export const createMenu = async (req, res, next) => {
   try {
-    const newMenu = new Menu();
+    const { name } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ message: "Name is required!!!" });
+    }
+
+    const newMenu = new Menu({ name });
     await newMenu.save();
+
     res
       .status(201)
       .json({ message: "Menu created successfully!!!", menu: newMenu });

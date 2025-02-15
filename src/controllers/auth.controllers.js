@@ -15,8 +15,13 @@ export const login = async (req, res, next) => {
       throw new CustomError("Incorrect password!!!", 400);
     }
     const token = await createAccessToken({ id: user._id });
-    res.cookie("token", token);
-    res.json({ id: user._id });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000, // 1 día
+    });
+    res.json({ id: user._id, username: user.username, role: user.role });
   } catch (error) {
     next(error);
   }
@@ -24,7 +29,12 @@ export const login = async (req, res, next) => {
 
 export const logout = (req, res, next) => {
   try {
-    res.cookie("token", "", { expires: new Date(0) });
+    res.cookie("token", "", {
+      expires: new Date(0),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
     return res.sendStatus(200);
   } catch (error) {
     next(error);

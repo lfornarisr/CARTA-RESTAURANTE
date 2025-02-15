@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 import { CustomError } from "../errors/CustomError.js"; // Importar el error personalizado
 
 export const addUser = async (req, res, next) => {
-  const { username, password, admin, role } = req.body;
+  const { username, password, role } = req.body;
 
   try {
     if (!username || !password) {
@@ -16,7 +16,7 @@ export const addUser = async (req, res, next) => {
       );
     }
     const passwordHash = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, password: passwordHash, admin, role });
+    const newUser = new User({ username, password: passwordHash, role });
     await newUser.save();
     res
       .status(201)
