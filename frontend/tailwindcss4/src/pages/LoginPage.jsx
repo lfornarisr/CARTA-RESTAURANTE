@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Input from "../components/ui/Input";
 
 axios.defaults.withCredentials = true;
 
@@ -23,6 +24,7 @@ export default function LoginPage() {
 
       navigate("/dashboard");
     } catch (err) {
+      console.log(err);
       setError("root", {
         type: "manual",
         message: err.response?.data?.message || "Error al iniciar sesión",
@@ -53,12 +55,12 @@ export default function LoginPage() {
           >
             Usuario
           </label>
-          <input
+
+          <Input
             type="text"
             id="username"
             {...register("username", { required: "El usuario es obligatorio" })}
             placeholder="Ingresa tu usuario"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
           />
           {errors.username && (
             <p className="text-red-500 text-sm mt-1">
@@ -74,15 +76,20 @@ export default function LoginPage() {
           >
             Contraseña
           </label>
-          <input
+
+          <Input
             type="password"
             id="password"
             {...register("password", {
               required: "La contraseña es obligatoria",
+              minLength: {
+                value: 6,
+                message: "La contraseña debe tener al menos 6 caracteres",
+              },
             })}
             placeholder="Ingresa tu contraseña"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
           />
+
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">
               {errors.password.message}

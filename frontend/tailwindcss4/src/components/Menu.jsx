@@ -1,5 +1,5 @@
-// components/Menu.jsx
-import { useMenu } from "../contexts/MenuContext.jsx";
+import useMenu from "../hooks/useMenu.js";
+import PropTypes from "prop-types";
 
 const Menu = ({ menu }) => {
   const { handleDeleteMenu } = useMenu();
@@ -22,3 +22,7 @@ const Menu = ({ menu }) => {
 };
 
 export default Menu;
+
+Menu.propTypes = {
+  menu: PropTypes.node.isRequired,
+};

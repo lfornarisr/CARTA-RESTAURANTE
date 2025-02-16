@@ -8,11 +8,11 @@ export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ username });
     if (!user) {
-      throw new CustomError("User not found!!!", 400);
+      throw new CustomError("Usuario no encontrado", 404);
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      throw new CustomError("Incorrect password!!!", 400);
+      throw new CustomError("Contraseña incorrecta", 401);
     }
     const token = await createAccessToken({ id: user._id });
     res.cookie("token", token, {

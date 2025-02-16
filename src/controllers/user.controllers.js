@@ -7,11 +7,11 @@ export const addUser = async (req, res, next) => {
 
   try {
     if (!username || !password) {
-      throw new CustomError("Username and password are required!!!", 400);
+      throw new CustomError("Usuario y contraseña requeridos", 400);
     }
     if (password.length < 6) {
       throw new CustomError(
-        "Password must be at least 6 characters long!!!",
+        "La contraseña debe tener al menos 6 caracteres",
         400
       );
     }
@@ -20,7 +20,7 @@ export const addUser = async (req, res, next) => {
     await newUser.save();
     res
       .status(201)
-      .json({ message: "User created successfully!!!", user: newUser });
+      .json({ message: "Usuario creado correctamente", user: newUser });
   } catch (error) {
     next(error);
   }
@@ -30,7 +30,7 @@ export const getUsers = async (req, res, next) => {
   try {
     const allUsers = await User.find({});
     if (allUsers.length === 0) {
-      throw new CustomError("No users found!!!", 404);
+      throw new CustomError("No se encontraron usuarios", 404);
     }
     res.status(200).json(allUsers);
   } catch (error) {
@@ -43,7 +43,7 @@ export const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(userId);
     if (!user) {
-      throw new CustomError("User not found!!!", 404);
+      throw new CustomError("Usuario no encontrado", 404);
     }
     res.status(200).json(user);
   } catch (error) {
@@ -56,13 +56,13 @@ export const deleteUser = async (req, res, next) => {
   try {
     const user = await User.findById(userId);
     if (!user) {
-      throw new CustomError("User not found!!!", 404);
+      throw new CustomError("Usuario no encontrado", 404);
     }
     if (userId === req.user.id) {
-      throw new CustomError("You cannot delete your own account!!!", 403);
+      throw new CustomError("No puedes borrar tu propio usuario", 403);
     }
     await User.findByIdAndDelete(userId);
-    res.status(200).json({ message: "User deleted successfully!!!" });
+    res.status(200).json({ message: "Usuario eliminado correctamente" });
   } catch (error) {
     next(error);
   }
@@ -73,28 +73,26 @@ export const updateUserPassword = async (req, res, next) => {
   const { newPassword } = req.body;
   try {
     if (!newPassword || newPassword.length < 6) {
-      const error = new Error("Password must be at least 6 characters long!!!");
-      error.statusCode = 400;
-      throw error;
+      throw new CustomError(
+        "La contraseña debe tener al menos 6 caracteres",
+        404
+      );
     }
     const user = await User.findById(userId);
     if (!user) {
-      const error = new Error("User not found!!!");
-      error.statusCode = 404;
-      throw error;
+      throw new CustomError("Usuario no encontrado", 404);
     }
     const isSamePassword = await bcrypt.compare(newPassword, user.password);
     if (isSamePassword) {
-      const error = new Error(
-        "New password must be different from the old one!!!"
+      throw new CustomError(
+        "La nueva contraseña debe ser diferente a la anterior",
+        400
       );
-      error.statusCode = 400;
-      throw error;
     }
     const passwordHash = await bcrypt.hash(newPassword, 10);
     user.password = passwordHash;
     await user.save();
-    res.status(200).json({ message: "Password updated successfully!!!" });
+    res.status(200).json({ message: "Contraseña actualizada correctamente" });
   } catch (error) {
     next(error);
   }

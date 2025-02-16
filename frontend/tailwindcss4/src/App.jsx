@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { MenuProvider } from "./contexts/MenuContext.jsx";
+import { MenuProvider } from "./providers/MenuProvider.jsx";
 
 function App() {
   return (

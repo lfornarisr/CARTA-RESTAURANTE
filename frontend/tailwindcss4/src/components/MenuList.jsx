@@ -1,5 +1,4 @@
-// components/MenuList.jsx
-import { useMenu } from "../contexts/MenuContext.jsx";
+import  useMenu  from "../hooks/useMenu.js";
 import Menu from "./Menu.jsx";
 
 const MenuList = () => {

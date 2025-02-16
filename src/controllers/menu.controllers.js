@@ -4,10 +4,9 @@ import Menu from "../models/menu.model.js";
 export const getMenus = async (req, res, next) => {
   try {
     const menus = await Menu.find();
-
     res.status(200).json(menus);
   } catch (error) {
-    next(new CustomError("Error fetching menus!!!", 500));
+    next(new CustomError("Error obteniendo los menús", 500));
   }
 };
 
@@ -16,7 +15,7 @@ export const createMenu = async (req, res, next) => {
     const { name } = req.body;
 
     if (!name) {
-      return res.status(400).json({ message: "Name is required!!!" });
+      throw new CustomError("El nombre es necesario para crear un menú", 400);
     }
 
     const newMenu = new Menu({ name });
@@ -24,9 +23,9 @@ export const createMenu = async (req, res, next) => {
 
     res
       .status(201)
-      .json({ message: "Menu created successfully!!!", menu: newMenu });
+      .json({ message: "Menú añadido correctamente", menu: newMenu });
   } catch (error) {
-    next(new CustomError("Error creating menu!!!", 500));
+    next(error);
   }
 };
 
@@ -36,11 +35,11 @@ export const getMenu = async (req, res, next) => {
   try {
     const menu = await Menu.findById(menuId);
     if (!menu) {
-      return res.status(404).json({ message: "Menu not found!!!" });
+      throw new CustomError("Menu no encontrado", 404);
     }
     res.status(200).json(menu);
   } catch (error) {
-    next(new CustomError("Error fetching menu!!!", 500));
+    next(error);
   }
 };
 
@@ -50,11 +49,11 @@ export const deleteMenu = async (req, res, next) => {
   try {
     const menu = await Menu.findByIdAndDelete(menuId);
     if (!menu) {
-      return res.status(404).json({ message: "Menu not found!!!" });
+      throw new CustomError("Menu no encontrado", 404);
     }
-    res.status(200).json({ message: "Menu deleted successfully!!!" });
+    res.status(200).json({ message: "Menu eliminado correctamente" });
   } catch (error) {
-    next(new CustomError("Error deleting menu!!!", 500));
+    next(error);
   }
 };
 
@@ -65,15 +64,15 @@ export const addCategory = async (req, res, next) => {
   try {
     const menu = await Menu.findById(menuId);
     if (!menu) {
-      return res.status(404).json({ message: "Menu not found!!!" });
+      throw new CustomError("Menu no encontrado", 404);
     }
 
     menu.categories.push({ name, dishes: [] });
     await menu.save();
 
-    res.status(200).json({ message: "Category added successfully!!!" });
+    res.status(200).json({ message: "Categoría añadida correctamente" });
   } catch (error) {
-    next(new CustomError("Error adding category!!!", 500));
+    next(error);
   }
 };
 
@@ -83,20 +82,20 @@ export const deleteCategory = async (req, res, next) => {
   try {
     const menu = await Menu.findById(menuId);
     if (!menu) {
-      return res.status(404).json({ message: "Menu not found!!!" });
+      throw new CustomError("Menu no encontrado", 404);
     }
 
     const category = menu.categories.id(categoryId);
     if (!category) {
-      return res.status(404).json({ message: "Category not found!!!" });
+      throw new CustomError("Categoría no encontrada", 404);
     }
 
     category.remove();
     await menu.save();
 
-    res.status(200).json({ message: "Category deleted successfully!!!" });
+    res.status(200).json({ message: "Categoría eliminada correctamente" });
   } catch (error) {
-    next(new CustomError("Error deleting category!!!", 500));
+    next(error);
   }
 };
 
@@ -107,20 +106,20 @@ export const addDishToCategory = async (req, res, next) => {
   try {
     const menu = await Menu.findById(menuId);
     if (!menu) {
-      return res.status(404).json({ message: "Menu not found!!!" });
+      throw new CustomError("Menu no encontrado", 404);
     }
 
     const category = menu.categories.id(categoryId);
     if (!category) {
-      return res.status(404).json({ message: "Category not found!!!" });
+      throw new CustomError("Categoría no encontrada", 404);
     }
 
     category.dishes.push({ name, price, description });
     await menu.save();
 
-    res.status(200).json({ message: "Dish added successfully!!!" });
+    res.status(200).json({ message: "Plato añadido correctamente" });
   } catch (error) {
-    next(new CustomError("Error adding dish!!!", 500));
+    next(error);
   }
 };
 
@@ -130,25 +129,25 @@ export const deleteDishFromCategory = async (req, res, next) => {
   try {
     const menu = await Menu.findById(menuId);
     if (!menu) {
-      return res.status(404).json({ message: "Menu not found!!!" });
+      throw new CustomError("Menu no encontrado", 404);
     }
 
     const category = menu.categories.id(categoryId);
     if (!category) {
-      return res.status(404).json({ message: "Category not found!!!" });
+      throw new CustomError("Categoría no encontrada", 404);
     }
 
     const dish = category.dishes.id(dishId);
     if (!dish) {
-      return res.status(404).json({ message: "Dish not found!!!" });
+      throw new CustomError("Plato no encontrado", 404);
     }
 
     dish.remove();
     await menu.save();
 
-    res.status(200).json({ message: "Dish deleted successfully!!!" });
+    res.status(200).json({ message: "Plato eliminado correctamente" });
   } catch (error) {
-    next(new CustomError("Error deleting dish!!!", 500));
+    next(error);
   }
 };
 
@@ -159,17 +158,17 @@ export const updateDishInCategory = async (req, res, next) => {
   try {
     const menu = await Menu.findById(menuId);
     if (!menu) {
-      return res.status(404).json({ message: "Menu not found!!!" });
+      throw new CustomError("Menu no encontrado", 404);
     }
 
     const category = menu.categories.id(categoryId);
     if (!category) {
-      return res.status(404).json({ message: "Category not found!!!" });
+      throw new CustomError("Categoría no encontrada", 404);
     }
 
     const dish = category.dishes.id(dishId);
     if (!dish) {
-      return res.status(404).json({ message: "Dish not found!!!" });
+      throw new CustomError("Plato no encontrado", 404);
     }
 
     dish.name = name;
@@ -177,8 +176,8 @@ export const updateDishInCategory = async (req, res, next) => {
     dish.description = description;
     await menu.save();
 
-    res.status(200).json({ message: "Dish updated successfully!!!" });
+    res.status(200).json({ message: "PLato actualizado correctamente" });
   } catch (error) {
-    next(new CustomError("Error updating dish!!!", 500));
+    next(error);
   }
 };

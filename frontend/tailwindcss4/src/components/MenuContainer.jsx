@@ -1,7 +1,8 @@
-import { useMenu } from "../contexts/MenuContext.jsx";
+import useMenu from "../hooks/useMenu.js";
 import { useForm } from "react-hook-form";
 import MenuList from "./MenuList.jsx";
 import { useEffect } from "react";
+import Input from "../components/ui/Input.jsx";
 
 export default function MenuContainer() {
   const { menus, error, handleAddMenu, fetchMenus } = useMenu();
@@ -27,7 +28,7 @@ export default function MenuContainer() {
       <div className="mt-6">
         <h2 className="text-xl font-semibold">Añadir nuevo menú</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <input
+          <Input
             type="text"
             placeholder="Nombre del menú"
             className={`p-2 border rounded-lg w-full ${
