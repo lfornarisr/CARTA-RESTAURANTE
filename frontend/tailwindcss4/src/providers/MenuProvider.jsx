@@ -36,97 +36,6 @@ export const MenuProvider = ({ children }) => {
     }
   };
 
-  const handleAddCategory = async (menuId, categoryName) => {
-    try {
-      const response = await axios.post(`/menus/${menuId}/categories`, {
-        name: categoryName,
-      });
-      setMenus((prevMenus) =>
-        prevMenus.map((menu) =>
-          menu._id === menuId
-            ? { ...menu, categories: [...menu.categories, response.data] }
-            : menu
-        )
-      );
-    } catch (error) {
-      console.error("Error adding category:", error);
-    }
-  };
-
-  const handleDeleteCategory = async (menuId, categoryId) => {
-    try {
-      await axios.delete(`/menus/${menuId}/categories/${categoryId}`);
-      setMenus((prevMenus) =>
-        prevMenus.map((menu) =>
-          menu._id === menuId
-            ? {
-                ...menu,
-                categories: menu.categories.filter(
-                  (cat) => cat._id !== categoryId
-                ),
-              }
-            : menu
-        )
-      );
-    } catch (error) {
-      console.error("Error deleting category:", error);
-    }
-  };
-
-  const handleAddDish = async (menuId, categoryId, dishData) => {
-    try {
-      const response = await axios.post(
-        `/menus/${menuId}/categories/${categoryId}/dishes`,
-        dishData
-      );
-      setMenus((prevMenus) =>
-        prevMenus.map((menu) =>
-          menu._id === menuId
-            ? {
-                ...menu,
-                categories: menu.categories.map((cat) =>
-                  cat._id === categoryId
-                    ? { ...cat, dishes: [...cat.dishes, response.data] }
-                    : cat
-                ),
-              }
-            : menu
-        )
-      );
-    } catch (error) {
-      console.error("Error adding dish:", error);
-    }
-  };
-
-  const handleDeleteDish = async (menuId, categoryId, dishId) => {
-    try {
-      await axios.delete(
-        `/menus/${menuId}/categories/${categoryId}/dishes/${dishId}`
-      );
-      setMenus((prevMenus) =>
-        prevMenus.map((menu) =>
-          menu._id === menuId
-            ? {
-                ...menu,
-                categories: menu.categories.map((cat) =>
-                  cat._id === categoryId
-                    ? {
-                        ...cat,
-                        dishes: cat.dishes.filter(
-                          (dish) => dish._id !== dishId
-                        ),
-                      }
-                    : cat
-                ),
-              }
-            : menu
-        )
-      );
-    } catch (error) {
-      console.error("Error deleting dish:", error);
-    }
-  };
-
   return (
     <MenuContext.Provider
       value={{
@@ -135,10 +44,6 @@ export const MenuProvider = ({ children }) => {
         fetchMenus,
         handleAddMenu,
         handleDeleteMenu,
-        handleAddCategory,
-        handleDeleteCategory,
-        handleAddDish,
-        handleDeleteDish,
       }}
     >
       {children}
