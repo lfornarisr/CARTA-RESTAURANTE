@@ -14,6 +14,8 @@ export const validateSchema = (schema) => (req, res, next) => {
 
     next();
   } catch (error) {
+    console.log(error);
+
     const errorMessages = error.errors
       ? error.errors.map((err) => err.message)
       : [error.message];

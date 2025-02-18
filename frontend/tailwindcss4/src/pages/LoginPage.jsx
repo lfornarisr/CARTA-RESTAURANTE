@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
+import Button from "../components/ui/Button";
 
 axios.defaults.withCredentials = true;
 
@@ -96,13 +97,9 @@ export default function LoginPage() {
             </p>
           )}
         </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors font-semibold"
-        >
+        <Button type="submit" className="w-full">
           Ingresar
-        </button>
+        </Button>
       </form>
     </div>
   );

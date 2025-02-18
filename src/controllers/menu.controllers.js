@@ -70,7 +70,12 @@ export const addCategory = async (req, res, next) => {
     menu.categories.push({ name, dishes: [] });
     await menu.save();
 
-    res.status(200).json({ message: "Categoría añadida correctamente" });
+    res
+      .status(200)
+      .json({
+        message: "Categoría añadida correctamente",
+        category: menu.categories[menu.categories.length - 1],
+      });
   } catch (error) {
     next(error);
   }

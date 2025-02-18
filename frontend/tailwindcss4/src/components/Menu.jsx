@@ -1,21 +1,26 @@
 import useMenu from "../hooks/useMenu.js";
 import PropTypes from "prop-types";
+import AddCategoryForm from "./AddCategoryForm.jsx";
+import Button from "./ui/Button.jsx";
+import CategoryList from "./CategoryList.jsx";
 
 const Menu = ({ menu }) => {
   const { handleDeleteMenu } = useMenu();
 
   return (
     <li className="p-4 border rounded-lg">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col justify-between">
         <div>
           <h3 className="font-medium">{menu.name}</h3>
         </div>
-        <button
+        <CategoryList categories={menu.categories} />
+        <AddCategoryForm categories={menu.categories} menuId={menu._id} />
+        <Button
           onClick={() => handleDeleteMenu(menu._id)}
-          className="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600 transition-colors"
+          className="bg-red-500 max-w-fit hover:bg-red-600 transition-colors"
         >
           Eliminar
-        </button>
+        </Button>
       </div>
     </li>
   );
@@ -24,5 +29,5 @@ const Menu = ({ menu }) => {
 export default Menu;
 
 Menu.propTypes = {
-  menu: PropTypes.node.isRequired,
+  menu: PropTypes.object.isRequired,
 };

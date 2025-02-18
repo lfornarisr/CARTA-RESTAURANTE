@@ -1,4 +1,4 @@
-import  useMenu  from "../hooks/useMenu.js";
+import useMenu from "../hooks/useMenu.js";
 import Menu from "./Menu.jsx";
 
 const MenuList = () => {

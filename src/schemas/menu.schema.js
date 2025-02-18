@@ -29,13 +29,13 @@ export const deleteMenuSchema = {
   params: z.object({ menuId: mongoIdSchema }),
 };
 
-export const addCategorySchema = z.object({
-  params: z.object({ menuID: mongoIdSchema }),
+export const addCategorySchema = {
+  params: z.object({ menuId: mongoIdSchema }),
   body: categoryValidationSchema,
-});
+};
 
 export const deleteCategorySchema = z.object({
-  params: z.object({ menuID: mongoIdSchema, categoryID: mongoIdSchema }),
+  params: z.object({ menuId: mongoIdSchema, categoryID: mongoIdSchema }),
 });
 
 export const addDishToCategorySchema = z.object({

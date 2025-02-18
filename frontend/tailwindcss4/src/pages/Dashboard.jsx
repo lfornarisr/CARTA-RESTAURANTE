@@ -2,6 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import axios from "../axios.config.js";
 import MenuContainer from "../components/MenuContainer.jsx";
+import Button from "../components/ui/Button.jsx";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -16,17 +17,17 @@ function Dashboard() {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
+    <div className="p-8 flex-col">
+      <div className="flex justify-end">
+        <Button
+          onClick={handleLogout}
+          className="flex-end bg-red-500 text-white hover:bg-red-600"
+        >
+          Cerrar sesión
+        </Button>
+      </div>
 
       <MenuContainer />
-
-      <button
-        onClick={handleLogout}
-        className="mt-6 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
-      >
-        Cerrar sesión
-      </button>
     </div>
   );
 }
