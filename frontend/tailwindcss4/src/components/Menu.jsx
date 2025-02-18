@@ -13,8 +13,8 @@ const Menu = ({ menu }) => {
         <div>
           <h3 className="font-medium">{menu.name}</h3>
         </div>
-        <CategoryList categories={menu.categories} />
-        <AddCategoryForm categories={menu.categories} menuId={menu._id} />
+        <CategoryList categories={menu.categories} />{" "}
+        <AddCategoryForm menuId={menu._id} />
         <Button
           onClick={() => handleDeleteMenu(menu._id)}
           className="bg-red-500 max-w-fit hover:bg-red-600 transition-colors"

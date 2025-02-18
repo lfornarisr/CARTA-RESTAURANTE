@@ -1,10 +1,8 @@
 import PropTypes from "prop-types"; // Importar PropTypes
 import DishList from "./DishList.jsx";
-/* import useMenu from "../hooks/useMenu.js";
- */
+
 const CategoryList = ({ categories }) => {
-  /*   const { categories } = useMenu();
-   */
+  // Recibe categories como prop
   return (
     <div className="mt-2">
       <h4 className="font-medium">Categorías:</h4>
@@ -22,6 +20,7 @@ const CategoryList = ({ categories }) => {
   );
 };
 
+// Actualiza los PropTypes para que coincidan
 CategoryList.propTypes = {
   categories: PropTypes.arrayOf(
     PropTypes.shape({

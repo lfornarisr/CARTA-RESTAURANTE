@@ -5,7 +5,6 @@ import MenuContext from "../contexts/MenuContext.jsx";
 
 export const MenuProvider = ({ children }) => {
   const [menus, setMenus] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
 
   const fetchMenus = useCallback(async () => {
@@ -37,7 +36,7 @@ export const MenuProvider = ({ children }) => {
     }
   };
 
-  const handleAddCategory = async (menuId, categoryName) => {
+  /* const handleAddCategory = async (menuId, categoryName) => {
     try {
       const response = await axios.post(`/api/menus/${menuId}/categories`, {
         name: categoryName,
@@ -61,14 +60,37 @@ export const MenuProvider = ({ children }) => {
       setError("Error al añadir la categoría");
       console.log(error);
     }
+  }; */
+
+  const handleAddCategory = async (menuId, categoryName) => {
+    try {
+      const response = await axios.post(`/api/menus/${menuId}/categories`, {
+        name: categoryName,
+      });
+
+      // Actualiza el estado global de `menus`
+      setMenus((prevMenus) =>
+        prevMenus.map((menu) =>
+          menu._id === menuId
+            ? {
+                ...menu,
+                categories: [...menu.categories, response.data.category],
+              }
+            : menu
+        )
+      );
+
+      setError("");
+    } catch (error) {
+      setError("Error al añadir la categoría");
+      console.log(error);
+    }
   };
 
   return (
     <MenuContext.Provider
       value={{
         menus,
-        categories,
-        setCategories,
         error,
         fetchMenus,
         handleAddMenu,

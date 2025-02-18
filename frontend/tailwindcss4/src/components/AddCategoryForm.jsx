@@ -3,9 +3,11 @@ import Input from "./ui/Input";
 import { useForm } from "react-hook-form";
 import useMenu from "../hooks/useMenu.js";
 import PropTypes from "prop-types";
+import { useState } from "react";
 
 function AddCategoryForm({ menuId }) {
   const { error, handleAddCategory } = useMenu();
+  const [isSubmitting, setIsSubmitting] = useState(false); // <- Nuevo estado
 
   const {
     register,
@@ -15,8 +17,13 @@ function AddCategoryForm({ menuId }) {
   } = useForm();
 
   const onSubmit = async (data) => {
-    await handleAddCategory(menuId, data.categoryName);
-    reset(); // Limpiar el formulario después de enviar
+    setIsSubmitting(true);
+    try {
+      await handleAddCategory(menuId, data.categoryName);
+      reset();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -40,7 +47,9 @@ function AddCategoryForm({ menuId }) {
         {errors.categoryName && (
           <p className="text-red-500 text-sm">{errors.categoryName.message}</p>
         )}
-        <Button type="submit">Añadir categoría</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Añadiendo..." : "Añadir categoría"}
+        </Button>
       </form>
       {error && <p className="text-red-500 mt-2">{error}</p>}
     </div>
