@@ -34,17 +34,17 @@ export const addCategorySchema = {
   body: categoryValidationSchema,
 };
 
-export const deleteCategorySchema = z.object({
-  params: z.object({ menuId: mongoIdSchema, categoryID: mongoIdSchema }),
-});
+export const deleteCategorySchema = {
+  params: z.object({ menuId: mongoIdSchema, categoryId: mongoIdSchema }),
+};
 
-export const addDishToCategorySchema = z.object({
+export const addDishToCategorySchema = {
   params: z.object({
-    menuID: mongoIdSchema,
-    categoryID: mongoIdSchema,
+    menuId: mongoIdSchema,
+    categoryId: mongoIdSchema,
   }),
   body: dishSchema,
-});
+};
 
 export const deleteDishFromCategorySchema = z.object({
   params: z.object({

@@ -6,8 +6,9 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 
 function AddCategoryForm({ menuId }) {
-  const { error, handleAddCategory } = useMenu();
-  const [isSubmitting, setIsSubmitting] = useState(false); // <- Nuevo estado
+  const { handleAddCategory } = useMenu();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [localError, setLocalError] = useState(null); // Estado local para el error
 
   const {
     register,
@@ -18,9 +19,12 @@ function AddCategoryForm({ menuId }) {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
+    setLocalError(null); // Limpia el error antes de enviar el formulario
     try {
       await handleAddCategory(menuId, data.categoryName);
       reset();
+    } catch (error) {
+      setLocalError("Error al añadir la categoría. Inténtalo de nuevo.");
     } finally {
       setIsSubmitting(false);
     }
@@ -51,7 +55,7 @@ function AddCategoryForm({ menuId }) {
           {isSubmitting ? "Añadiendo..." : "Añadir categoría"}
         </Button>
       </form>
-      {error && <p className="text-red-500 mt-2">{error}</p>}
+      {localError && <p className="text-red-500 mt-2">{localError}</p>}{" "}
     </div>
   );
 }

@@ -13,7 +13,7 @@ const Menu = ({ menu }) => {
         <div>
           <h3 className="font-medium">{menu.name}</h3>
         </div>
-        <CategoryList categories={menu.categories} />{" "}
+        <CategoryList menuId={menu._id} categories={menu.categories} />{" "}
         <AddCategoryForm menuId={menu._id} />
         <Button
           onClick={() => handleDeleteMenu(menu._id)}

@@ -1,12 +1,11 @@
 import PropTypes from "prop-types"; // Importar PropTypes
+import Dish from "./Dish";
 
 const DishList = ({ dishes }) => {
   return (
     <ul className="ml-4">
       {dishes.map((dish) => (
-        <li key={dish._id}>
-          {dish.name} - ${dish.price}
-        </li>
+        <Dish key={dish._id} dish={dish} />
       ))}
     </ul>
   );

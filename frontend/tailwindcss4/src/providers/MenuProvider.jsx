@@ -36,39 +36,12 @@ export const MenuProvider = ({ children }) => {
     }
   };
 
-  /* const handleAddCategory = async (menuId, categoryName) => {
-    try {
-      const response = await axios.post(`/api/menus/${menuId}/categories`, {
-        name: categoryName,
-      });
-
-      // Actualizar el estado global de los menús
-      setMenus((prevMenus) =>
-        prevMenus.map((menu) =>
-          menu._id === menuId
-            ? {
-                ...menu,
-                categories: [...menu.categories, response.data.category],
-              }
-            : menu
-        )
-      );
-
-      setError("");
-      return response.data.category;
-    } catch (error) {
-      setError("Error al añadir la categoría");
-      console.log(error);
-    }
-  }; */
-
   const handleAddCategory = async (menuId, categoryName) => {
     try {
       const response = await axios.post(`/api/menus/${menuId}/categories`, {
         name: categoryName,
       });
 
-      // Actualiza el estado global de `menus`
       setMenus((prevMenus) =>
         prevMenus.map((menu) =>
           menu._id === menuId
@@ -87,6 +60,68 @@ export const MenuProvider = ({ children }) => {
     }
   };
 
+  const handleDeleteCategory = async (menuId, categoryId) => {
+    try {
+      await axios.delete(`/api/menus/${menuId}/categories/${categoryId}`);
+
+      setMenus((prevMenus) =>
+        prevMenus.map((menu) =>
+          menu._id === menuId
+            ? {
+                ...menu,
+                categories: menu.categories.filter(
+                  (category) => category._id !== categoryId
+                ),
+              }
+            : menu
+        )
+      );
+    } catch (error) {
+      console.error("Error al eliminar la categoría:", error);
+    }
+  };
+
+  const handleAddDish = async (
+    menuId,
+    categoryId,
+    dishName,
+    dishPrice,
+    dishDescription
+  ) => {
+    try {
+      const response = await axios.post(
+        `/api/menus/${menuId}/categories/${categoryId}/dishes`,
+        {
+          name: dishName,
+          price: dishPrice,
+          description: dishDescription,
+        }
+      );
+
+      setMenus((prevMenus) =>
+        prevMenus.map((menu) =>
+          menu._id === menuId
+            ? {
+                ...menu,
+                categories: menu.categories.map((category) =>
+                  category._id === categoryId
+                    ? {
+                        ...category,
+                        dishes: [...category.dishes, response.data.dish],
+                      }
+                    : category
+                ),
+              }
+            : menu
+        )
+      );
+      setError("");
+    } catch (error) {
+      setError("Error al añadir el plato");
+      console.error("Error detallado:", error.response?.data); // Muestra el mensaje de error del servidor
+    }
+  };
+
   return (
     <MenuContext.Provider
       value={{
@@ -96,6 +131,8 @@ export const MenuProvider = ({ children }) => {
         handleAddMenu,
         handleDeleteMenu,
         handleAddCategory,
+        handleDeleteCategory,
+        handleAddDish,
       }}
     >
       {children}

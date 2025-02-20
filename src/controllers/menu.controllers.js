@@ -70,12 +70,10 @@ export const addCategory = async (req, res, next) => {
     menu.categories.push({ name, dishes: [] });
     await menu.save();
 
-    res
-      .status(200)
-      .json({
-        message: "Categoría añadida correctamente",
-        category: menu.categories[menu.categories.length - 1],
-      });
+    res.status(200).json({
+      message: "Categoría añadida correctamente",
+      category: menu.categories[menu.categories.length - 1],
+    });
   } catch (error) {
     next(error);
   }
@@ -90,13 +88,14 @@ export const deleteCategory = async (req, res, next) => {
       throw new CustomError("Menu no encontrado", 404);
     }
 
-    const category = menu.categories.id(categoryId);
-    if (!category) {
+    const result = await Menu.updateOne(
+      { _id: menuId },
+      { $pull: { categories: { _id: categoryId } } }
+    );
+
+    if (result.nModified === 0) {
       throw new CustomError("Categoría no encontrada", 404);
     }
-
-    category.remove();
-    await menu.save();
 
     res.status(200).json({ message: "Categoría eliminada correctamente" });
   } catch (error) {
@@ -119,10 +118,17 @@ export const addDishToCategory = async (req, res, next) => {
       throw new CustomError("Categoría no encontrada", 404);
     }
 
+    // Añadir el nuevo plato
     category.dishes.push({ name, price, description });
     await menu.save();
 
-    res.status(200).json({ message: "Plato añadido correctamente" });
+    // Obtener el último plato añadido (correctamente)
+    const newDish = category.dishes[category.dishes.length - 1]; // <--- Corrección aquí
+
+    res.status(200).json({
+      message: "Plato añadido correctamente",
+      dish: newDish, // <--- Usamos la variable newDish
+    });
   } catch (error) {
     next(error);
   }
